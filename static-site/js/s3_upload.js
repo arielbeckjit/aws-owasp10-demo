@@ -3,13 +3,13 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
 });
 AWS.config.credentials.get(function(err) {
     if (err) alert(err);
-    #console.log(AWS.config.credentials);
+    //console.log(AWS.config.credentials);
 });
 
 accessKeyId = AWS.config.credentials.accessKeyId
 secretAccessKey = AWS.config.credentials.secretAccessKey
 
-var bucketName = 'reko-photo-tagging-demo';
+var bucketName = 'owasp10-demo';
 var bucket = new AWS.S3({
     params: {
         Bucket: bucketName
@@ -40,8 +40,7 @@ button.addEventListener('click', function() {
               Key: objKey,
               ContentType: fileType,
               CacheControl: 'max-age=3600',
-              Body: file,
-              ACL: 'public-read'
+              Body: file
           };
           bucket.putObject(params, function(err, data) {
               if (err) {

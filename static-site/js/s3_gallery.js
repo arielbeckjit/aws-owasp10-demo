@@ -1,19 +1,19 @@
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: AWSPoolID
 });
-AWS.config.credentials.get(function(err) {
-    if (err) alert(err);
-    //console.log(AWS.config.credentials);
-});
 
-var bucketName = 'reko-photo-tagging-demo';
+
+accessKeyId = AWS.config.credentials.accessKeyId
+secretAccessKey = AWS.config.credentials.secretAccessKey
+
+var bucketName = 'owasp10-demo';
 var bucket = new AWS.S3({
     params: {
         Bucket: bucketName
     }
 });
 
-var ddbTableTags = 'reko-photo-tagging-demo-PhotosTags';
+var ddbTableTags = 'owasp10-demo-PhotosTags';
 var ddb = new AWS.DynamoDB.DocumentClient();
 
 function listObjs() {
