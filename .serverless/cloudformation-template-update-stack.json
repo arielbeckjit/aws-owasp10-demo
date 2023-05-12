@@ -241,7 +241,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/owasp10/demo/1683754383698-2023-05-10T21:33:03.698Z/owasp10.zip"
+          "S3Key": "serverless/owasp10/demo/1683901632591-2023-05-12T14:27:12.591Z/owasp10.zip"
         },
         "Handler": "parse_photo.run_reko",
         "Runtime": "python3.9",
@@ -266,7 +266,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/owasp10/demo/1683754383698-2023-05-10T21:33:03.698Z/owasp10.zip"
+          "S3Key": "serverless/owasp10/demo/1683901632591-2023-05-12T14:27:12.591Z/owasp10.zip"
         },
         "Handler": "get_info.get_tags",
         "Runtime": "python3.9",
@@ -284,24 +284,24 @@
         "GetTagsLogGroup"
       ]
     },
-    "RunRekoLambdaVersion3bp32UlDhdBDRB1efr0NE9mMa8FM7LG7WmmOypBNJW4": {
+    "RunRekoLambdaVersionIx7jaPViZoSNKnDB1eUHtfMgrESb79YpOLwyo3tU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RunRekoLambdaFunction"
         },
-        "CodeSha256": "ZHz+cJJh+nd4y99p0RKWDzwcyp03IGXqCnTSQROvuH4="
+        "CodeSha256": "BGguG+5M1suj34fBDTQkmtKJWnI6WQ0BVLP/h6tCOnI="
       }
     },
-    "GetTagsLambdaVersionhdXVmAGlULu7Nl4L7Z8y7JmlleZQIqfRyYTcPn4yp8": {
+    "GetTagsLambdaVersionYFN91ECRQ25XJovwxUV9NptuBZDWTIwAVgvCEBLL4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetTagsLambdaFunction"
         },
-        "CodeSha256": "ZHz+cJJh+nd4y99p0RKWDzwcyp03IGXqCnTSQROvuH4="
+        "CodeSha256": "BGguG+5M1suj34fBDTQkmtKJWnI6WQ0BVLP/h6tCOnI="
       }
     },
     "ApiGatewayRestApi": {
@@ -389,7 +389,7 @@
         "GetTagsLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1683754382556": {
+    "ApiGatewayDeployment1683901631393": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -589,7 +589,9 @@
       "Properties": {
         "DistributionConfig": {
           "ViewerCertificate": {
-            "AcmCertificateArn": "arn:aws:acm:us-east-1:762542255826:certificate/0e719c9f-4e21-4b90-b71f-68c2b42e158a",
+            "AcmCertificateArn": {
+              "Fn::Sub": "arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/0e719c9f-4e21-4b90-b71f-68c2b42e158a"
+            },
             "SslSupportMethod": "sni-only"
           },
           "Enabled": true,
@@ -694,6 +696,9 @@
         },
         "Action": "lambda:InvokeFunction",
         "Principal": "s3.amazonaws.com",
+        "SourceAccount": {
+          "Ref": "AWS::AccountId"
+        },
         "SourceArn": {
           "Fn::Join": [
             "",
@@ -784,6 +789,14 @@
                 {
                   "Effect": "Allow",
                   "Action": [
+                    "s3:ListBucket",
+                    "s3:GetObject"
+                  ],
+                  "Resource": "arn:aws:s3:::owasp10-demo"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
                     "dynamodb:Query",
                     "dynamodb:Scan",
                     "dynamodb:GetItem"
@@ -842,7 +855,7 @@
     "RunRekoLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RunRekoLambdaVersion3bp32UlDhdBDRB1efr0NE9mMa8FM7LG7WmmOypBNJW4"
+        "Ref": "RunRekoLambdaVersionIx7jaPViZoSNKnDB1eUHtfMgrESb79YpOLwyo3tU"
       },
       "Export": {
         "Name": "sls-owasp10-demo-RunRekoLambdaFunctionQualifiedArn"
@@ -851,7 +864,7 @@
     "GetTagsLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetTagsLambdaVersionhdXVmAGlULu7Nl4L7Z8y7JmlleZQIqfRyYTcPn4yp8"
+        "Ref": "GetTagsLambdaVersionYFN91ECRQ25XJovwxUV9NptuBZDWTIwAVgvCEBLL4"
       },
       "Export": {
         "Name": "sls-owasp10-demo-GetTagsLambdaFunctionQualifiedArn"

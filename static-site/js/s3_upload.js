@@ -40,7 +40,8 @@ button.addEventListener('click', function() {
               Key: objKey,
               ContentType: fileType,
               CacheControl: 'max-age=3600',
-              Body: file
+              Body: file,
+              ACL: 'public-read'
           };
           bucket.putObject(params, function(err, data) {
               if (err) {

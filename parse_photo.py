@@ -17,9 +17,9 @@ logger.setLevel(logging.INFO)
 region_name=os.environ['AWS_REGION']
 
 dynamodb = boto3.resource('dynamodb', region_name)
-photos_table = dynamodb.Table('reko-photo-tagging-demo-Photos')
-tags_table = dynamodb.Table('reko-photo-tagging-demo-Tags')
-photo_tags_table = dynamodb.Table('reko-photo-tagging-demo-PhotosTags')
+photos_table = dynamodb.Table('owasp10-demo-Photos')
+tags_table = dynamodb.Table('owasp10-demo-Tags')
+photo_tags_table = dynamodb.Table('owasp10-demo-PhotosTags')
 
 rekognition = boto3.client("rekognition", region_name)
 
@@ -80,7 +80,7 @@ def run_reko(event, context):
     logger.info('Event Data: ' + json.dumps(event))
 
     file_object = event['Records'][0]['s3']['object']
-    file_key = urllib.unquote_plus(file_object['key'].encode("utf8"))
+    file_key = urllib.parse.unquote_plus(file_object['key'], encoding ='utf8')
     bucket_object = event['Records'][0]['s3']['bucket']
     event_time = event['Records'][0]['eventTime']
 

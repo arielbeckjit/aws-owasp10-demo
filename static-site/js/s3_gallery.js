@@ -2,7 +2,6 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: AWSPoolID
 });
 
-
 accessKeyId = AWS.config.credentials.accessKeyId
 secretAccessKey = AWS.config.credentials.secretAccessKey
 
@@ -24,7 +23,7 @@ function listObjs() {
         EncodingType: "url",
     }, function(err, data) {
         if (err) {
-            gallery.innerHTML = 'ERROR: ' + err;
+            gallery.innerHTML = 'ERROR LIST: ' + err;
         } else {
             var objKeys = "";
             data.Contents.forEach(function(obj) {
@@ -48,7 +47,7 @@ function getTags(key){
   };
   ddb.query(params, function(err, data) {
     if (err) {
-      console.log("Error", err);
+      console.log("Error QUERY", err);
     } else {
       //console.log("Success", data);
       data.Items.forEach(function(element, index, array) {
