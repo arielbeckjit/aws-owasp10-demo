@@ -268,7 +268,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/owasp10/demo/1683901632591-2023-05-12T14:27:12.591Z/owasp10.zip"
+                "S3Key": "serverless/owasp10/demo/1684051614102-2023-05-14T08:06:54.102Z/owasp10.zip"
               },
               "Handler": "parse_photo.run_reko",
               "Runtime": "python3.9",
@@ -293,7 +293,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/owasp10/demo/1683901632591-2023-05-12T14:27:12.591Z/owasp10.zip"
+                "S3Key": "serverless/owasp10/demo/1684051614102-2023-05-14T08:06:54.102Z/owasp10.zip"
               },
               "Handler": "get_info.get_tags",
               "Runtime": "python3.9",
@@ -416,7 +416,7 @@
               "GetTagsLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1683901631393": {
+          "ApiGatewayDeployment1684051613025": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -811,7 +811,7 @@
                           "s3:GetObject",
                           "s3:PutObjectAcl"
                         ],
-                        "Resource": "arn:aws:s3:::owasp10-demo/*"
+                        "Resource": "arn:aws:s3:::*"
                       },
                       {
                         "Effect": "Allow",
@@ -1429,7 +1429,7 @@
                         "s3:GetObject",
                         "s3:PutObjectAcl"
                       ],
-                      "Resource": "arn:aws:s3:::owasp10-demo/*"
+                      "Resource": "arn:aws:s3:::*"
                     },
                     {
                       "Effect": "Allow",
@@ -1529,7 +1529,7 @@
     "artifact": "/Users/boazz/Documents/Evangelism/projects/aws-owasp10-demo/.serverless/owasp10.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/owasp10/demo/1683901632591-2023-05-12T14:27:12.591Z",
+    "artifactDirectoryName": "serverless/owasp10/demo/1684051614102-2023-05-14T08:06:54.102Z",
     "artifact": "owasp10.zip"
   }
 }
