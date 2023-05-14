@@ -208,6 +208,7 @@ resources:
             Compress: false
             DefaultTTL: 30
             MinTTL: 10
+            MaxTTL: 30
             ForwardedValues:
               QueryString: false
 
