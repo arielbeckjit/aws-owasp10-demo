@@ -268,7 +268,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/owasp10/demo/1684051614102-2023-05-14T08:06:54.102Z/owasp10.zip"
+                "S3Key": "serverless/owasp10/demo/1684099119182-2023-05-14T21:18:39.182Z/owasp10.zip"
               },
               "Handler": "parse_photo.run_reko",
               "Runtime": "python3.9",
@@ -293,7 +293,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/owasp10/demo/1684051614102-2023-05-14T08:06:54.102Z/owasp10.zip"
+                "S3Key": "serverless/owasp10/demo/1684099119182-2023-05-14T21:18:39.182Z/owasp10.zip"
               },
               "Handler": "get_info.get_tags",
               "Runtime": "python3.9",
@@ -305,30 +305,31 @@
                   "IamRoleLambdaExecution",
                   "Arn"
                 ]
-              }
+              },
+              "ReservedConcurrentExecutions": 5
             },
             "DependsOn": [
               "GetTagsLogGroup"
             ]
           },
-          "RunRekoLambdaVersionIx7jaPViZoSNKnDB1eUHtfMgrESb79YpOLwyo3tU": {
+          "RunRekoLambdaVersionnFROEcj3S2VqRwgEQHHDOMpHg28Yeb1YQMneKtuGs": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RunRekoLambdaFunction"
               },
-              "CodeSha256": "BGguG+5M1suj34fBDTQkmtKJWnI6WQ0BVLP/h6tCOnI="
+              "CodeSha256": "PhVrEvnxxbU3ClCgJjbf3vkTp5iwJ3W4qEaG37AkFLY="
             }
           },
-          "GetTagsLambdaVersionYFN91ECRQ25XJovwxUV9NptuBZDWTIwAVgvCEBLL4": {
+          "GetTagsLambdaVersion3k0iJZ0D9zQcF0DqzqGoyGXvFho51pPCvQflHP90FdI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetTagsLambdaFunction"
               },
-              "CodeSha256": "BGguG+5M1suj34fBDTQkmtKJWnI6WQ0BVLP/h6tCOnI="
+              "CodeSha256": "PhVrEvnxxbU3ClCgJjbf3vkTp5iwJ3W4qEaG37AkFLY="
             }
           },
           "ApiGatewayRestApi": {
@@ -416,7 +417,7 @@
               "GetTagsLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1684051613025": {
+          "ApiGatewayDeployment1684099117989": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -659,6 +660,7 @@
                   "Compress": false,
                   "DefaultTTL": 30,
                   "MinTTL": 10,
+                  "MaxTTL": 30,
                   "ForwardedValues": {
                     "QueryString": false
                   }
@@ -882,7 +884,7 @@
           "RunRekoLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RunRekoLambdaVersionIx7jaPViZoSNKnDB1eUHtfMgrESb79YpOLwyo3tU"
+              "Ref": "RunRekoLambdaVersionnFROEcj3S2VqRwgEQHHDOMpHg28Yeb1YQMneKtuGs"
             },
             "Export": {
               "Name": "sls-owasp10-demo-RunRekoLambdaFunctionQualifiedArn"
@@ -891,7 +893,7 @@
           "GetTagsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetTagsLambdaVersionYFN91ECRQ25XJovwxUV9NptuBZDWTIwAVgvCEBLL4"
+              "Ref": "GetTagsLambdaVersion3k0iJZ0D9zQcF0DqzqGoyGXvFho51pPCvQflHP90FdI"
             },
             "Export": {
               "Name": "sls-owasp10-demo-GetTagsLambdaFunctionQualifiedArn"
@@ -1059,10 +1061,11 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "RunRekoLambdaVersionIx7jaPViZoSNKnDB1eUHtfMgrESb79YpOLwyo3tU"
+        "versionLogicalId": "RunRekoLambdaVersionnFROEcj3S2VqRwgEQHHDOMpHg28Yeb1YQMneKtuGs"
       },
       "GetTags": {
         "handler": "get_info.get_tags",
+        "reservedConcurrency": 5,
         "events": [
           {
             "http": {
@@ -1078,7 +1081,7 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "GetTagsLambdaVersionYFN91ECRQ25XJovwxUV9NptuBZDWTIwAVgvCEBLL4"
+        "versionLogicalId": "GetTagsLambdaVersion3k0iJZ0D9zQcF0DqzqGoyGXvFho51pPCvQflHP90FdI"
       }
     },
     "resources": {
@@ -1277,6 +1280,7 @@
                 "Compress": false,
                 "DefaultTTL": 30,
                 "MinTTL": 10,
+                "MaxTTL": 30,
                 "ForwardedValues": {
                   "QueryString": false
                 }
@@ -1529,7 +1533,7 @@
     "artifact": "/Users/boazz/Documents/Evangelism/projects/aws-owasp10-demo/.serverless/owasp10.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/owasp10/demo/1684051614102-2023-05-14T08:06:54.102Z",
+    "artifactDirectoryName": "serverless/owasp10/demo/1684099119182-2023-05-14T21:18:39.182Z",
     "artifact": "owasp10.zip"
   }
 }

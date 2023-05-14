@@ -87,6 +87,7 @@ functions:
     handler: parse_photo.run_reko
   GetTags:
     handler: get_info.get_tags
+    reservedConcurrency: 5
     events:
       - http:
           path: info/get_tags

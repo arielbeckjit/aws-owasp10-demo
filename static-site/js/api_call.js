@@ -11,7 +11,6 @@ function callAPI(myTag){
         //console.info(data);
         var objKeys = "";
         var rawKeys = [];
-        var bucketName = 'reko-photo-tagging-demo';
         data.forEach(function(obj) {
           //console.log(obj.photo_id);
           objKey = obj.photo_id;

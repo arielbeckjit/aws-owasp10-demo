@@ -25,11 +25,11 @@ def get_tags(event, context):
     tag = event['queryStringParameters']['tag']
 
     try:
-	response = photo_tags_table.query(
-        IndexName='TagOnly',
-        ProjectionExpression="photo_id",
-	    KeyConditionExpression=Key('tag_id').eq(tag)
-    )
+        response = photo_tags_table.query(
+            IndexName='TagOnly',
+            ProjectionExpression="photo_id",
+            KeyConditionExpression=Key('tag_id').eq(tag)
+        )
 
     except ClientError as e:
         logger.error(e.response['Error']['Message'])
