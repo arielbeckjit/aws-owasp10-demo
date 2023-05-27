@@ -4,6 +4,7 @@ import boto3
 import json
 import logging
 import os
+import time
 from boto3.dynamodb.conditions import Key, Attr
 from botocore.exceptions import ClientError
 
@@ -21,7 +22,7 @@ photo_tags_table = dynamodb.Table('owasp10-demo-PhotosTags')
 
 def get_tags(event, context):
     logger.info('Received event: ' + json.dumps(event))
-
+    time.sleep(1)
     tag = event['queryStringParameters']['tag']
 
     try:

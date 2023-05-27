@@ -60,9 +60,6 @@ button.addEventListener('click', function() {
     }
     else {
       button.style.display = 'none';
-      var dataBase64 = fileChooser.toDataURL("image/jpeg");
-      dataBlob = dataURLtoBlob(dataBase64);
-      var file = dataBlob;
       //Changed to text/html
       var fileType = 'text/html';
       if (file) {

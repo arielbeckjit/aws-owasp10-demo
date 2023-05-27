@@ -23,7 +23,7 @@ function listObjs() {
         EncodingType: "url",
     }, function(err, data) {
         if (err) {
-            gallery.innerHTML = 'ERROR LIST: ' + err;
+            gallery.innerHTML = "<div class='row badge block-wrap badge-pill badge-danger m-5 p-3'><h4>Error: " + err + "</h4></div>";
         } else {
             var objKeys = "";
             data.Contents.forEach(function(obj) {
