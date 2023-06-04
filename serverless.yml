@@ -315,8 +315,8 @@ resources:
                     - 's3:ListBucket'
                     - 's3:GetObject'
                     - 's3:PutObjectAcl'
-                  #Resource: 'arn:aws:s3:::*'
-                  Resource: 'arn:aws:s3:::${self:service}-${self:provider.stage}/*'
+                  Resource: 'arn:aws:s3:::*'
+                  #Resource: 'arn:aws:s3:::${self:service}-${self:provider.stage}/*'
 
                 - Effect: 'Allow'
                   Action:
