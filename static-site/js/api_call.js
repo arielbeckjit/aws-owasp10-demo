@@ -22,7 +22,7 @@ function callAPI(myTag){
       },
       error: function(data, textStatus, errorThrown){
         console.error(data);
-        gallery.innerHTML = "<div class='row badge block-wrap badge-pill badge-danger m-5 p-3'><h4>Error: " + data.statusText + "</h4></div>";
+        gallery.innerHTML = "<div class='row badge block-wrap badge-pill badge-danger m-5 p-3'><h4>Error: " + JSON.parse(data.responseText)["message"] + "</h4></div>";
       }
       });
     }
