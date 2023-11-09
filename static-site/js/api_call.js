@@ -11,7 +11,6 @@ function callAPI(myTag){
         //console.info(data);
         var objKeys = "";
         var rawKeys = [];
-        var bucketName = 'reko-photo-tagging-demo';
         data.forEach(function(obj) {
           //console.log(obj.photo_id);
           objKey = obj.photo_id;
@@ -21,8 +20,9 @@ function callAPI(myTag){
         gallery.innerHTML = objKeys;
         rawKeys.forEach(getTags);
       },
-      error: function(data){
+      error: function(data, textStatus, errorThrown){
         console.error(data);
+        gallery.innerHTML = "<div class='row badge block-wrap badge-pill badge-danger m-5 p-3'><h4>Error: " + JSON.parse(data.responseText)["message"] + "</h4></div>";
       }
       });
     }

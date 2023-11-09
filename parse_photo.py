@@ -81,7 +81,7 @@ def run_reko(event, context):
     logger.info('Event Data: ' + json.dumps(event))
 
     file_object = event['Records'][0]['s3']['object']
-    file_key = urllib.unquote_plus(file_object['key'].encode("utf8"))
+    file_key = urllib.parse.unquote_plus(file_object['key'], encoding ='utf8')
     bucket_object = event['Records'][0]['s3']['bucket']
     event_time = event['Records'][0]['eventTime']
 

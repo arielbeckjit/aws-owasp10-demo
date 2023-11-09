@@ -1,4 +1,4 @@
-# Serverless Website for Photo Tagging with Amazon Rekognition
+# OWASP 10 Serverless Demo - Serverless Website for Photo Tagging with Amazon Rekognition
 This is a demo website using Serverless architecture that allow you to upload photos from your camera/disk to an S3 bucket and trigger a backend processing that will extract tags from the photo, by using Amazon Rekognition service.
 
 # Prerequisites
@@ -7,7 +7,7 @@ This is a demo website using Serverless architecture that allow you to upload ph
 
 In order to run this website you'll need an AWS Account with access to create AWS IAM, S3, CloudFront, DynamoDB, Lambda, API Gateway, Rekognition and Cognito resources.
 
-Your account credentials should be added to your local environment. Run `aws configure` to configure your account.
+Your account credentials should be added to your local environment. Run `aws configure` to configure your account. This code is using a specific profile calles `owasp-demo`, which can be removed/changed.
 
 ## Serverless framework
 
@@ -30,7 +30,7 @@ $ npm install --save serverless-s3-sync
 
 ### config.js
 
-Each time you deploy this app to AWS your AWS settings and services will be changed. You should manage those parameters in [/static-site/js/config.js](/static-site/js/config.js).
+Each time you deploy this app to AWS, your AWS settings and services will be changed. You should manage those parameters in [/static-site/js/config.js](/static-site/js/config.js).
 
 Please make sure you provide the next parameters before deploying you app:
 

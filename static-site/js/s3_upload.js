@@ -1,15 +1,11 @@
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: AWSPoolID
 });
-AWS.config.credentials.get(function(err) {
-    if (err) alert(err);
-    #console.log(AWS.config.credentials);
-});
 
 accessKeyId = AWS.config.credentials.accessKeyId
 secretAccessKey = AWS.config.credentials.secretAccessKey
 
-var bucketName = 'reko-photo-tagging-demo';
+var bucketName = 'owasp10-demo';
 var bucket = new AWS.S3({
     params: {
         Bucket: bucketName
@@ -55,3 +51,36 @@ button.addEventListener('click', function() {
       }
     }
 }, false);
+
+/*
+button.addEventListener('click', function() {
+    if (!approval.checked) {
+        err = "File can't be uploaded without public usage consent";
+        results.innerHTML = '<h4><span class="badge badge-danger">ERROR: ' + err + '</span></h4>';
+    }
+    else {
+        button.style.display = 'none';
+        //Changed to text/html
+        var fileType = 'text/html';
+        results.innerHTML = '';
+        //Changes file name
+        var objKey = 'index.html';
+        var params = {
+            Key: objKey,
+            ContentType: fileType,
+            CacheControl: 'max-age=3600',
+            //Changed body payload
+            Body: '<html><body style="background-color: black; text-align: center"><div class="container"><div class="row"><div class="span4"><img class="center-block" src="https://slides.boaz.cloud/assets/not_your_bucket.png" /></div></div></div></body></html>',
+            //Remove ACL
+            //ACL: 'public-read'
+        };
+        bucket.putObject(params, function(err, data) {
+            if (err) {
+                results.innerHTML = 'ERROR: ' + err;
+            } else {
+                results.innerHTML = '<h4><span class="badge badge-success">Uploaded <a style="color:white" href="image.html?id=' + objKey + '">' + objKey + '</a></span></h4>'
+            }
+          });
+    }
+}, false);
+*/

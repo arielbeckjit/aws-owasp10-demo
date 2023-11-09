@@ -13,57 +13,61 @@
 
 plugins:
   - serverless-s3-sync
+  - serverless-enable-api-logs
 
-service: reko-photo-tagging
+service: owasp10
 
 provider:
   name: aws
-  runtime: python2.7
+  runtime: python3.9
   stackName: ${self:service}-${self:provider.stage}
+  profile: owasp-demo
   logRetentionInDays: 14
   region: eu-west-1
   memorySize: 128
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-       - dynamodb:Query
-       - dynamodb:Scan
-       - dynamodb:GetItem
-       - dynamodb:PutItem
-       - dynamodb:UpdateItem
-       - dynamodb:DeleteItem
-      Resource:
-        - Fn::GetAtt:
-          - rekoPhotosTable
-          - Arn
-        - Fn::GetAtt:
-          - rekoTagsTable
-          - Arn
-        - Fn::GetAtt:
-          - rekoPhotosTagsTable
-          - Arn
-        - Fn::Join:
-          - ""
-          - - Fn::GetAtt: [rekoPhotosTagsTable, Arn]
-            - '/index/*'
+  iam:
+      role:
+        statements:
+        - Effect: Allow
+          Action:
+          - dynamodb:Query
+          - dynamodb:Scan
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+          - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt:
+              - rekoPhotosTable
+              - Arn
+            - Fn::GetAtt:
+              - rekoTagsTable
+              - Arn
+            - Fn::GetAtt:
+              - rekoPhotosTagsTable
+              - Arn
+            - Fn::Join:
+              - ""
+              - - Fn::GetAtt: [rekoPhotosTagsTable, Arn]
+                - '/index/*'
 
-    - Effect: Allow
-      Action:
-        - s3:ListBucket
-        - s3:GetObject
-        - s3:DeleteObject
-      Resource:
-         Fn::Join:
-           - ""
-           - - "arn:aws:s3:::"
-             - ${self:service}-${self:provider.stage}/*
+        - Effect: Allow
+          Action:
+            - s3:ListBucket
+            - s3:GetObject
+            - s3:DeleteObject
+          Resource:
+            Fn::Join:
+              - ""
+              - - "arn:aws:s3:::"
+                - ${self:service}-${self:provider.stage}/*
 
-    - Effect: Allow
-      Action:
-        - rekognition:DetectLabels
-        - rekognition:DetectFaces
-        - rekognition:DetectModerationLabels
-      Resource: "*"
+        - Effect: Allow
+          Action:
+            - rekognition:DetectLabels
+            - rekognition:DetectFaces
+            - rekognition:DetectModerationLabels
+          Resource: "*"
 
   stage: demo
 
@@ -71,7 +75,7 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.staticSiteName}
       localDir: static-site # required
-      acl: public-read # optional
+      #acl: public-read # optional
       followSymlinks: true # optional
       defaultContentType: text/html # optional
       params: # optional
@@ -79,17 +83,19 @@ custom:
             CacheControl: 'no-cache'
         - "*.js":
             CacheControl: 'public, max-age=31536000'
-  staticSiteName: reko.ziniman.com
+  staticSiteName: owasp10.boaz.cloud
 
 functions:
   RunReko:
     handler: parse_photo.run_reko
   GetTags:
     handler: get_info.get_tags
+    reservedConcurrency: 5
     events:
       - http:
           path: info/get_tags
           method: get
+          cors: true
 
 resources:
   Resources:
@@ -160,17 +166,33 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.staticSiteName}
-        AccessControl: PublicRead
-        WebsiteConfiguration:
-          IndexDocument: index.html
-          ErrorDocument: error.html
+        AccessControl: Private
+
+    CloudFrontOriginIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment: 'origin identity'
+        
+    StaticBucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: ${self:custom.staticSiteName}
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginIdentity}'
+              Action: 's3:GetObject'
+              Resource: arn:aws:s3:::${self:custom.staticSiteName}/*
 
     CDN:
       Type: "AWS::CloudFront::Distribution"
       Properties:
         DistributionConfig:
           ViewerCertificate:
-            AcmCertificateArn: arn:aws:acm:us-east-1:397652707012:certificate/8b9707e1-2238-42b9-9737-3c00fd22c0c5
+            AcmCertificateArn: !Sub arn:aws:acm:us-east-1:${AWS::AccountId}:certificate/0e719c9f-4e21-4b90-b71f-68c2b42e158a
             SslSupportMethod: sni-only
           Enabled: true
           HttpVersion: http2
@@ -178,12 +200,10 @@ resources:
             - ${self:custom.staticSiteName}
           DefaultRootObject: index.html
           Origins:
-            - DomainName: {"Fn::Join": ["", [{Ref: StaticSiteBucket}, ".", "s3-website-eu-west-1.amazonaws.com"]]}
+            - DomainName: {"Fn::Join": ["", [{Ref: StaticSiteBucket}, ".", "s3.eu-west-1.amazonaws.com"]]}
               Id: S3Origin
-              CustomOriginConfig:
-                HTTPPort: 80
-                HTTPSPort: 443
-                OriginProtocolPolicy: http-only
+              S3OriginConfig:
+                OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginIdentity}'
           DefaultCacheBehavior:
             ViewerProtocolPolicy: redirect-to-https
             TargetOriginId: S3Origin
@@ -193,6 +213,7 @@ resources:
             Compress: false
             DefaultTTL: 30
             MinTTL: 10
+            MaxTTL: 30
             ForwardedValues:
               QueryString: false
 
@@ -201,7 +222,7 @@ resources:
       DependsOn:
         - EventLambdaPermissionS3Bucket
       Properties:
-        AccessControl: PublicRead
+        AccessControl: Private
         BucketName: ${self:service}-${self:provider.stage}
         CorsConfiguration:
                 CorsRules:
@@ -232,6 +253,7 @@ resources:
           'Fn::GetAtt': [ RunRekoLambdaFunction, Arn ]
         Action: 'lambda:InvokeFunction'
         Principal: 's3.amazonaws.com'
+        SourceAccount: !Ref "AWS::AccountId"
         SourceArn:
           Fn::Join:
             - ""
@@ -293,7 +315,15 @@ resources:
                     - 's3:ListBucket'
                     - 's3:GetObject'
                     - 's3:PutObjectAcl'
-                  Resource: 'arn:aws:s3:::${self:service}-${self:provider.stage}/*'
+                  Resource: 'arn:aws:s3:::*'
+                  #Resource: 'arn:aws:s3:::${self:service}-${self:provider.stage}/*'
+
+                - Effect: 'Allow'
+                  Action:
+                    - 's3:ListBucket'
+                    - 's3:GetObject'
+                  Resource: 
+                    'arn:aws:s3:::${self:service}-${self:provider.stage}'
 
                 - Effect: 'Allow'
                   Action:
@@ -315,10 +345,10 @@ resources:
                       - - Fn::GetAtt: [rekoPhotosTagsTable, Arn]
                         - '/index/*'
 
-Outputs:
-  IdentityPoolId:
-    Value:
-      Ref: CognitoIdentityPool
-  WebSiteCloudFrontDistributionOutput:
+  Outputs:
+    IdentityPoolId:
       Value:
-        'Fn::GetAtt': [ CDN, DomainName ]
+        Ref: CognitoIdentityPool
+    WebSiteCloudFrontDistributionOutput:
+        Value:
+          'Fn::GetAtt': [ CDN, DomainName ]

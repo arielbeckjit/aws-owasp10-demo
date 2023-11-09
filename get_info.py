@@ -4,6 +4,7 @@ import boto3
 import json
 import logging
 import os
+import time
 from boto3.dynamodb.conditions import Key, Attr
 from botocore.exceptions import ClientError
 
@@ -15,21 +16,21 @@ logger.setLevel(logging.INFO)
 region_name=os.environ['AWS_REGION']
 
 dynamodb = boto3.resource('dynamodb', region_name)
-photos_table = dynamodb.Table('reko-photo-tagging-demo-Photos')
-tags_table = dynamodb.Table('reko-photo-tagging-demo-Tags')
-photo_tags_table = dynamodb.Table('reko-photo-tagging-demo-PhotosTags')
+photos_table = dynamodb.Table('owasp10-demo-Photos')
+tags_table = dynamodb.Table('owasp10-demo-Tags')
+photo_tags_table = dynamodb.Table('owasp10-demo-PhotosTags')
 
 def get_tags(event, context):
     logger.info('Received event: ' + json.dumps(event))
-
+    time.sleep(1)
     tag = event['queryStringParameters']['tag']
 
     try:
-	response = photo_tags_table.query(
-        IndexName='TagOnly',
-        ProjectionExpression="photo_id",
-	    KeyConditionExpression=Key('tag_id').eq(tag)
-    )
+        response = photo_tags_table.query(
+            IndexName='TagOnly',
+            ProjectionExpression="photo_id",
+            KeyConditionExpression=Key('tag_id').eq(tag)
+        )
 
     except ClientError as e:
         logger.error(e.response['Error']['Message'])
