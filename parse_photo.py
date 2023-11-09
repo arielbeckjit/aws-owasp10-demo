@@ -20,6 +20,7 @@ dynamodb = boto3.resource('dynamodb', region_name)
 photos_table = dynamodb.Table('reko-photo-tagging-demo-Photos')
 tags_table = dynamodb.Table('reko-photo-tagging-demo-Tags')
 photo_tags_table = dynamodb.Table('reko-photo-tagging-demo-PhotosTags')
+MY_AWS_SECRET = "AKIALALEMEL33EEXAMPLE"
 
 rekognition = boto3.client("rekognition", region_name)
 
